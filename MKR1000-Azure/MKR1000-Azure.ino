@@ -8,11 +8,11 @@
 
 RTCZero rtc;
 
-char hostname[] = "xIOTdemo.azure-devices.net";
-char authSAS[] = "SharedAccessSignature sr=xIOTdemo.azure-devices.net%2Fdevices%2FSparkLab&sig=3ICz23hJQF0JYPTMCehjoxM2N72qX5SxYciNRhKHToI%3D&se=1511491146";
+char hostname[] = "";
+char authSAS[] = "";
 
-String hubName = "xIOTdemo";
-String deviceName = "SparkLab";
+String hubName = "";
+String deviceName = "";
 
 String uri = "/devices/" + deviceName +"/messages/events?api-version=2016-02-03";
 
