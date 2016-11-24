@@ -57,16 +57,15 @@ void loop() {
   Serial.println(" %");
 
   if (!(isnan(temperature) || isnan(humidity))) {
-    sendEvent("Temperature", temperature, "F"); 
-    sendEvent("Humidity", humidity, "%");     
+    sendEvent(deviceName, temperature, humidity); 
   }
 
   delay(10000);
 }
 
-void sendEvent(String measurename, float value, String unitofmeasure) {
+void sendEvent(String deviceName, float temperature, float humidity) {
 
-  String json = createJSON(measurename, value, unitofmeasure);
+  String json = createJSON(deviceName, temperature, humidity);
   httpPost(json);
 
   String response = "";
@@ -87,20 +86,16 @@ void sendEvent(String measurename, float value, String unitofmeasure) {
 
 }
 
-String createJSON(String measurename, float value, String unitofmeasure) {
+String createJSON(String deviceName, float temperature, float humidity) {
   char dateString[25];
   sprintf(dateString, "2%03d-%02d-%02dT%02d:%02d:%02d.000Z", rtc.getYear(), rtc.getMonth(), rtc.getDay(), rtc.getHours(), rtc.getMinutes(), rtc.getSeconds());
 
+   
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["subject"] = "wthr";
-  root["organization"] = "Foo Industries";
-  root["displayname"] = "MKR1000";
-  root["measurename"] = measurename;
-  root["unitofmeasure"] = unitofmeasure;
-  root["value"] = String(value);
-  root["timecreated"] = dateString;
-  root["guid"] = "123456";
+  root["deviceId"] = deviceName;
+  root["temperature"] = String(temperature);
+  root["humidity"] = String(humidity);
 
   char json[200];
   root.printTo(json, sizeof(json));
@@ -135,4 +130,3 @@ void httpPost(String content)
       Serial.println("Connection failed");
     }
 }
-
